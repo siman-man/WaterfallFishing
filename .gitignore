@@ -1,0 +1,11 @@
+*.jar
+AbstractWars
+/data
+*.java
+*.txt
+Rakefile
+*.png
+parse.rb
+.idea
+cmake-build-debug
+output
