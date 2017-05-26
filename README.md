@@ -108,3 +108,9 @@ If any fish is generated outside the bounds of the river, a new location is chos
 Each fish travels down the river. If at any point it meets a rock, it moves one unit to the left or right (at random, unless against the edge of the river).
 This simulation continues for each fish until it goes over the waterfall and lands in it's final location (0..W-1).
 Note that only the value of W is given (implied by string length) as part of the input to your code. The other data is used for generating the location of fish over the waterfall on each day, but is not explicitly provided.
+
+
+## 考察
+
+岩を置くと、その下の場所に魚は来れない
+自分の場所の左右に岩が存在している場合は、到達確率が上がる。
