@@ -78,21 +78,23 @@ public:
 
         map<int, bool> check;
 
+        /*j
         setTraps[0] = false;
         setTraps[W - 1] = false;
+         */
 
         for (int x = 0; x < W; x++) {
             if (g_fish[x] <= days / 2) {
-                setTraps[x] = false;
+                //setTraps[x] = false;
             }
         }
 
         for (int x = 1; x < W - 1; x++) {
             if (g_fish[x - 1] >= g_fish[x] && g_fish[x] <= g_fish[x + 1]) {
-                setTraps[x] = false;
+                //setTraps[x] = false;
             }
             if (g_fish[x - 1] > 2 * g_fish[x] || 2 * g_fish[x] < g_fish[x + 1]) {
-                setTraps[x] = false;
+                //setTraps[x] = false;
             }
         }
 
@@ -110,7 +112,13 @@ public:
         for (int i = 0; i < W * 0.1; i++) {
             Node node = pque.top();
             pque.pop();
-            traps.push_back(node.x);
+
+            if (setTraps[node.x]) {
+                traps.push_back(node.x);
+
+                if (node.x > 0) setTraps[node.x - 1] = false;
+                if (node.x < W - 1) setTraps[node.x + 1] = false;
+            }
         }
 
         /*
