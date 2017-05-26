@@ -116,8 +116,10 @@ public:
             if (setTraps[node.x]) {
                 traps.push_back(node.x);
 
-                if (node.x > 0) setTraps[node.x - 1] = false;
-                if (node.x < W - 1) setTraps[node.x + 1] = false;
+                for (int d = 0; d < W / 8; d++) {
+                    if (node.x > d) setTraps[node.x - (d + 1)] = false;
+                    if (node.x < W - (d + 1)) setTraps[node.x + (d + 1)] = false;
+                }
             }
         }
 
