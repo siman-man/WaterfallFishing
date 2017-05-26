@@ -1,6 +1,7 @@
 //C++11
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include <string>
 #include <string.h>
 #include <vector>
@@ -32,7 +33,7 @@ public:
         }
     }
 
-    void init(vector<string> &data) {
+    void init(vector <string> &data) {
         memset(g_fish, 0, sizeof(g_fish));
 
         W = data[0].size();
@@ -45,22 +46,32 @@ public:
         }
     }
 
-    vector<int> placeTraps(vector<string> data) {
+    vector<int> placeTraps(vector <string> data) {
         init(data);
         fprintf(stderr, "W = %d\n", W);
         // put traps in all locations on the river
         vector<int> traps;
-        for (int j = 0; j < W; ++j) {
-            if (g_fish[j] != 0) {
-                traps.push_back(j);
+        int limit = 10;
+
+        map<int, bool> check;
+
+        while (traps.size() < W / 20) {
+            for (int j = 0; j < W; ++j) {
+                if (g_fish[j] >= limit && !check[j]) {
+                    traps.push_back(j);
+                    check[j] = true;
+                }
             }
+
+            limit--;
         }
         return traps;
     }
 };
 // -------8<------- end of solution submitted to the website -------8<-------
 
-template<class T> void getVector(vector<T>& v) {
+template<class T>
+void getVector(vector <T> &v) {
     for (int i = 0; i < v.size(); ++i)
         cin >> v[i];
 }
@@ -69,7 +80,7 @@ int main() {
     WaterfallFishing wf;
     int S;
     cin >> S;
-    vector<string> data(S);
+    vector <string> data(S);
     getVector(data);
 
     vector<int> ret = wf.placeTraps(data);

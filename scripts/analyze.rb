@@ -18,7 +18,7 @@ class Analyze
 
         seeds << data[0]
         puts data[1]
-        if data[1] == 0.0
+        if data[1] == -1.0
           sum_score += Float::INFINITY
         else
           sum_score += data[1]
