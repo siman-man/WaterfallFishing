@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <string.h>
+#include <queue>
 #include <vector>
 #include <cassert>
 
@@ -19,6 +20,20 @@ unsigned long long xor128() {
     rz = rw;
     return (rw = (rw ^ (rw >> 19)) ^ (rt ^ (rt >> 8)));
 }
+
+struct Node {
+    int x;
+    int fishCount;
+
+    Node(int x = -1, int fishCount = -1) {
+        this->x = x;
+        this->fishCount = fishCount;
+    }
+
+    bool operator>(const Node &n) const {
+        return fishCount < n.fishCount;
+    }
+};
 
 int g_fish[MAX_W];
 int W;
@@ -39,10 +54,15 @@ public:
         W = data[0].size();
 
         for (int i = 0; i < (int) data.size(); i++) {
+            int sumFish = 0;
+
             for (int x = 0; x < W; x++) {
                 int num = char2int(data[i][x]);
+                sumFish += num;
                 g_fish[x] += num;
             }
+
+            fprintf(stderr, "%s : %2d\n", data[i].c_str(), sumFish);
         }
     }
 
@@ -51,20 +71,55 @@ public:
         fprintf(stderr, "W = %d\n", W);
         // put traps in all locations on the river
         vector<int> traps;
-        int limit = 10;
+        int days = data.size();
+        bool setTraps[W];
+
+        memset(setTraps, true, sizeof(setTraps));
 
         map<int, bool> check;
 
-        while (traps.size() < W / 20) {
-            for (int j = 0; j < W; ++j) {
-                if (g_fish[j] >= limit && !check[j]) {
-                    traps.push_back(j);
-                    check[j] = true;
-                }
-            }
+        setTraps[0] = false;
+        setTraps[W - 1] = false;
 
-            limit--;
+        for (int x = 0; x < W; x++) {
+            if (g_fish[x] <= days / 2) {
+                setTraps[x] = false;
+            }
         }
+
+        for (int x = 1; x < W - 1; x++) {
+            if (g_fish[x - 1] >= g_fish[x] && g_fish[x] <= g_fish[x + 1]) {
+                setTraps[x] = false;
+            }
+            if (g_fish[x - 1] > 2 * g_fish[x] || 2 * g_fish[x] < g_fish[x + 1]) {
+                setTraps[x] = false;
+            }
+        }
+
+        priority_queue <Node, vector<Node>, greater<Node>> pque;
+
+        for (int x = 0; x < W; x++) {
+            Node node(x, g_fish[x]);
+            fprintf(stderr, "%d", setTraps[x]);
+
+            pque.push(node);
+        }
+
+        fprintf(stderr, "\n");
+
+        for (int i = 0; i < W * 0.1; i++) {
+            Node node = pque.top();
+            pque.pop();
+            traps.push_back(node.x);
+        }
+
+        /*
+        for (int x = 0; x < W; ++x) {
+            if (!setTraps[x]) continue;
+            traps.push_back(x);
+        }
+         */
+
         return traps;
     }
 };
