@@ -2,6 +2,7 @@
 WaterfallFishing
 /data
 *.java
+/seed
 *.txt
 Rakefile
 *.png
