@@ -86,17 +86,19 @@ public:
             pque.push(node);
         }
 
-        for (int i = 0; i < W * 0.1; i++) {
+        for (int i = 0; i < 3 && !pque.empty(); i++) {
             Node node = pque.top();
             pque.pop();
 
             if (setTraps[node.x]) {
                 traps.push_back(node.x);
 
-                for (int d = 0; d < W / 8; d++) {
+                for (int d = 0; d < W / 6; d++) {
                     if (node.x > d) setTraps[node.x - (d + 1)] = false;
                     if (node.x < W - (d + 1)) setTraps[node.x + (d + 1)] = false;
                 }
+            } else {
+                i--;
             }
         }
 
