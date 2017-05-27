@@ -69,7 +69,7 @@ public:
     vector<int> placeTraps(vector <string> data) {
         init(data);
         fprintf(stderr, "W = %d\n", W);
-        // put traps in all locations on the river
+
         vector<int> traps;
         int days = data.size();
         bool setTraps[W];
@@ -86,17 +86,14 @@ public:
             pque.push(node);
         }
 
-        for (int i = 0; i < 3 && !pque.empty(); i++) {
+        for (int i = 0; i < 5 && !pque.empty(); i++) {
             Node node = pque.top();
+            int id = node.x / (W / 5);
             pque.pop();
 
-            if (setTraps[node.x]) {
+            if (setTraps[id]) {
                 traps.push_back(node.x);
-
-                for (int d = 0; d < W / 6; d++) {
-                    if (node.x > d) setTraps[node.x - (d + 1)] = false;
-                    if (node.x < W - (d + 1)) setTraps[node.x + (d + 1)] = false;
-                }
+                setTraps[id] = false;
             } else {
                 i--;
             }
@@ -121,11 +118,9 @@ public:
 // -------8<------- end of solution submitted to the website -------8<-------
 template<class T>
 void getVector(vector <T> &v) { for (int i = 0; i < v.size(); ++i) cin >> v[i]; }
-
 int main() {
     WaterfallFishing wf;
-    int S;
-    cin >> S;
+    int S; cin >> S;
     vector <string> data(S);
     getVector(data);
     vector<int> ret = wf.placeTraps(data);
