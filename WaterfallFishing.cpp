@@ -102,12 +102,9 @@ public:
 
         for (int x = 0; x < W; x++) {
             Node node(x, g_fish[x]);
-            fprintf(stderr, "%d", setTraps[x]);
 
             pque.push(node);
         }
-
-        fprintf(stderr, "\n");
 
         for (int i = 0; i < W * 0.1; i++) {
             Node node = pque.top();
@@ -123,12 +120,17 @@ public:
             }
         }
 
-        /*
-        for (int x = 0; x < W; ++x) {
-            if (!setTraps[x]) continue;
-            traps.push_back(x);
+        while (!pque.empty()) {
+            Node node = pque.top();
+            pque.pop();
+            setTraps[node.x] = false;
         }
-         */
+
+        for (int x = 0; x < W; ++x) {
+            fprintf(stderr, "%d", setTraps[x]);
+        }
+
+        fprintf(stderr, "\n");
 
         return traps;
     }
