@@ -86,15 +86,23 @@ public:
             pque.push(node);
         }
 
+        map<int, bool> checkArea;
+
         for (int i = 0; i < 5 && !pque.empty(); i++) {
             Node node = pque.top();
             int id = node.x / (W / 5);
             pque.pop();
 
-            if (setTraps[id]) {
+            if (!checkArea[id] && setTraps[node.x]) {
                 traps.push_back(node.x);
-                setTraps[id] = false;
+                checkArea[id] = true;
+
+                for (int d = 0; d < W / 20; d++) {
+                    setTraps[max(0, node.x - (d + 1))] = false;
+                    setTraps[min(W - 1, node.x + (d + 1))] = false;
+                }
             } else {
+                setTraps[node.x] = false;
                 i--;
             }
         }
@@ -120,7 +128,8 @@ template<class T>
 void getVector(vector <T> &v) { for (int i = 0; i < v.size(); ++i) cin >> v[i]; }
 int main() {
     WaterfallFishing wf;
-    int S; cin >> S;
+    int S;
+    cin >> S;
     vector <string> data(S);
     getVector(data);
     vector<int> ret = wf.placeTraps(data);
