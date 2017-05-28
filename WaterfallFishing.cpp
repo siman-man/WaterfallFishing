@@ -78,26 +78,6 @@ public:
 
         map<int, bool> check;
 
-        /*j
-        setTraps[0] = false;
-        setTraps[W - 1] = false;
-         */
-
-        for (int x = 0; x < W; x++) {
-            if (g_fish[x] <= days / 2) {
-                //setTraps[x] = false;
-            }
-        }
-
-        for (int x = 1; x < W - 1; x++) {
-            if (g_fish[x - 1] >= g_fish[x] && g_fish[x] <= g_fish[x + 1]) {
-                //setTraps[x] = false;
-            }
-            if (g_fish[x - 1] > 2 * g_fish[x] || 2 * g_fish[x] < g_fish[x + 1]) {
-                //setTraps[x] = false;
-            }
-        }
-
         priority_queue <Node, vector<Node>, greater<Node>> pque;
 
         for (int x = 0; x < W; x++) {
