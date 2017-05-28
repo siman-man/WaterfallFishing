@@ -88,7 +88,10 @@ public:
 
         map<int, bool> checkArea;
 
-        for (int i = 0; i < 5 && !pque.empty(); i++) {
+        checkArea[0] = true;
+        checkArea[4] = true;
+
+        for (int i = 0; i < 1 && !pque.empty(); i++) {
             Node node = pque.top();
             int id = node.x / (W / 5);
             pque.pop();
@@ -97,7 +100,7 @@ public:
                 traps.push_back(node.x);
                 checkArea[id] = true;
 
-                for (int d = 0; d < W / 20; d++) {
+                for (int d = 0; d < W / 4; d++) {
                     setTraps[max(0, node.x - (d + 1))] = false;
                     setTraps[min(W - 1, node.x + (d + 1))] = false;
                 }
