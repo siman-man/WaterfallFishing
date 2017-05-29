@@ -68,7 +68,7 @@ public:
 
     vector<int> placeTraps(vector <string> data) {
         init(data);
-        fprintf(stderr, "W = %d\n", W);
+        fprintf(stderr, "WIDTH = %d\n", W);
 
         vector<int> traps;
         int days = data.size();
