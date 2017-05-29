@@ -76,8 +76,6 @@ public:
 
         memset(setTraps, true, sizeof(setTraps));
 
-        map<int, bool> check;
-
         priority_queue <Node, vector<Node>, greater<Node>> pque;
 
         for (int x = 0; x < W; x++) {
@@ -86,24 +84,16 @@ public:
             pque.push(node);
         }
 
-        map<int, bool> checkArea;
-
-        checkArea[0] = true;
-        checkArea[4] = true;
+        double rate = 0.25;
 
         for (int i = 0; i < 1 && !pque.empty(); i++) {
             Node node = pque.top();
-            int id = node.x / (W / 5);
             pque.pop();
 
-            if (!checkArea[id] && setTraps[node.x]) {
-                traps.push_back(node.x);
-                checkArea[id] = true;
+            bool flag = (W * rate) < node.x && node.x < W * (1.0 - rate);
 
-                for (int d = 0; d < W / 4; d++) {
-                    setTraps[max(0, node.x - (d + 1))] = false;
-                    setTraps[min(W - 1, node.x + (d + 1))] = false;
-                }
+            if (flag) {
+                traps.push_back(node.x);
             } else {
                 setTraps[node.x] = false;
                 i--;
@@ -129,6 +119,7 @@ public:
 // -------8<------- end of solution submitted to the website -------8<-------
 template<class T>
 void getVector(vector <T> &v) { for (int i = 0; i < v.size(); ++i) cin >> v[i]; }
+
 int main() {
     WaterfallFishing wf;
     int S;

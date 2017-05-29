@@ -6,6 +6,7 @@ class Analyze
     time_stamp = Time.now.strftime("%m%d-%H%m%S")
 
     @record = File.open(File.expand_path("data/record-#{time_stamp}.tsv", Dir::pwd), 'w')
+    result = []
 
     begin
       @record.puts(TSV_LABEL)
@@ -15,15 +16,16 @@ class Analyze
 
       data_list.each do |data|
         data = clean_data(data)
+        result << data
 
-        seeds << data[0]
+        seeds << data[:seed]
         puts data[1]
         if data[1] == -1.0
           sum_score += Float::INFINITY
         else
-          sum_score += data[1]
+          sum_score += data[:score]
         end
-        @record.puts(data.join("\t"))
+        @record.puts(data.values.join("\t"))
       end
 
       #p seeds
@@ -31,15 +33,27 @@ class Analyze
     ensure
       @record&.close
     end
+
+    result.group_by { |d| [d[:width] - 1, 20].max / 10 }.sort.each do |id, datas|
+      sum = 0
+
+      datas.each do |d|
+        sum += d[:score]
+      end
+
+      puts [sum / datas.size]
+      #puts [id, sum / datas.size].join(' ')
+    end
   end 
 
   def clean_data(data)
-    seed = data['seed'].to_i
-    score = data['score'].to_f
+    seed = data['seed']&.to_i
+    score = data['score']&.to_f
     /(?<minute>\d+)m(?<second>(\d|\.)+)s/ =~ data['user']
     time = minute.to_f * 60 + second.to_f
+    width = data['width']&.to_i
 
-    [seed, score, time]
+    {seed: seed, score: score, time: time, width: width}
   end
 
   def parse
@@ -48,15 +62,12 @@ class Analyze
     data = {}
 
     File.open(filepath, 'r') do |file|
-      check = false
       file.each_line do |line|
         line = clean_line(line)
 
         if line =~ /begin/
           data = {}
-          check = false
         elsif line =~ /!end!/
-        #elsif line =~ /!end!/ && check
           data_list << data.dup
         else
           if validate(line)
@@ -79,7 +90,7 @@ class Analyze
   end
 
   def validate(line)
-    line =~ /^(score|seed|user)/
+    line =~ /^(score|seed|user|width)/
   end
 end
 
