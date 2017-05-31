@@ -1,25 +1,13 @@
-//C++11
 #include <algorithm>
 #include <iostream>
-#include <map>
 #include <string>
 #include <string.h>
 #include <queue>
 #include <vector>
-#include <cassert>
 
 using namespace std;
 
 const int MAX_W = 200;
-
-unsigned long long xor128() {
-    static unsigned long long rx = 123456789, ry = 362436069, rz = 521288629, rw = 88675123;
-    unsigned long long rt = (rx ^ (rx << 11));
-    rx = ry;
-    ry = rz;
-    rz = rw;
-    return (rw = (rw ^ (rw >> 19)) ^ (rt ^ (rt >> 8)));
-}
 
 struct Node {
     int x;
@@ -71,17 +59,13 @@ public:
         fprintf(stderr, "WIDTH = %d\n", W);
 
         vector<int> traps;
-        int days = data.size();
         bool setTraps[W];
-
         memset(setTraps, true, sizeof(setTraps));
 
         priority_queue <Node, vector<Node>, greater<Node>> pque;
 
         for (int x = 0; x < W; x++) {
-            Node node(x, g_fish[x]);
-
-            pque.push(node);
+            pque.push(Node(x, g_fish[x]));
         }
 
         double rate = 0.25;
@@ -90,9 +74,7 @@ public:
             Node node = pque.top();
             pque.pop();
 
-            bool flag = (W * rate) < node.x && node.x < W * (1.0 - rate);
-
-            if (flag) {
+            if ((W * rate) < node.x && node.x < W * (1.0 - rate)) {
                 traps.push_back(node.x);
             } else {
                 setTraps[node.x] = false;
